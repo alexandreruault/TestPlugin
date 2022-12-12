@@ -4,13 +4,20 @@
     <name>IntelliJ Platform Plugin TestPlugin</name>
     <vendor>alexandreruault</vendor>
 
+    <depends>org.jetbrains.android</depends>
+    <depends>org.jetbrains.kotlin</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.androidstudio</depends>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.alexandreruault.testplugin.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.alexandreruault.testplugin.services.MyProjectService"/>
     </extensions>
-
+    <extensions defaultExtensionNs="com.android.tools.idea.wizard.template">
+        <wizardTemplateProvider implementation="com.github.alexandreruault.testplugin.WizardTemplateProviderImpl" />
+    </extensions>
     <applicationListeners>
         <listener class="com.github.alexandreruault.testplugin.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
