@@ -8,6 +8,7 @@ import com.github.alexandreruault.testplugin.manager.Path
 import com.github.alexandreruault.testplugin.manager.ProjectFileManager
 import com.github.alexandreruault.testplugin.manager.addPackageName
 import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationFragment
+import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationModule
 import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationSubComponent
 import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationViewModel
 import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationViewModelFactory
@@ -53,6 +54,15 @@ fun RecipeExecutor.fragmentPresentationLayerTemplate(
         subComponentName,
         className
     ).save(pfm.getPath(), diPackageName, subComponentName.asKt())
+
+    createPresentationModule(
+        presentationPackageName = packageName,
+        injectionPackageName = diPackageName,
+        viewModelName,
+        subComponentName,
+        className
+    ).save(pfm.getPath(), diPackageName, "${viewModelName}Module".asKt())
+
 
 
     // createActivity(className = className, manifestOut = manifestOut, moduleData = moduleData)

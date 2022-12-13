@@ -77,8 +77,8 @@ fun createPresentationFragment(
       }
 
       override fun injectFragment() {
-              InjectHelper.getOrCreateSubcomponent(requireContext(), ${className}SubComponent::class.java)
-              .${className.toCamelCase()}SubComponentBuilder()
+              InjectHelper.getOrCreateSubcomponent(requireContext(), ${subComponentName}::class.java)
+              .${subComponentName.toCamelCase()}Builder()
               .bind(this)
               .bind(requireActivity())
               .build()
@@ -178,6 +178,36 @@ interface $subComponentName {
 
         fun build(): ${subComponentName.toCamelCase()}
     }
+}
+    
+""".trimIndent()
+
+
+fun createPresentationModule(
+    presentationPackageName: String = PackageManager.packageName,
+    injectionPackageName: String = PackageManager.packageName,
+    viewModelName: String,
+    subComponentName :String,
+    fragmentName: String
+) = """
+package $injectionPackageName
+
+import androidx.lifecycle.ViewModelProvider
+import ${presentationPackageName}.$fragmentName
+import ${presentationPackageName}.$viewModelName
+import ${presentationPackageName}.${viewModelName}Factory
+import dagger.Module
+import dagger.Provides
+
+@Module
+class ${viewModelName}Module {
+
+    @Provides
+    fun provide${viewModelName}(
+        fragment: $fragmentName,
+        factory: ${viewModelName}Factory
+    ): $viewModelName=
+        ViewModelProvider(fragment, factory)[${viewModelName}::class.java]
 }
     
 """.trimIndent()
