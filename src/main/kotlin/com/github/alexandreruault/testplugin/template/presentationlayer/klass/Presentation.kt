@@ -2,12 +2,13 @@ package com.github.alexandreruault.testplugin.template.presentationlayer.klass
 
 import android.databinding.tool.ext.toCamelCase
 import com.github.alexandreruault.testplugin.manager.PackageManager
+import com.github.alexandreruault.testplugin.template.presentationlayer.viewModel
 
 fun createPresentationFragment(
     presentationPackageName: String = PackageManager.packageName,
     className: String,
+    layountName: String,
     viewModelName: String,
-    subComponentName: String
 ) = """
   package $presentationPackageName
    import android.content.Context
@@ -17,13 +18,9 @@ fun createPresentationFragment(
    import android.view.ViewGroup
    import androidx.appcompat.widget.Toolbar
    import com.comuto.R
-   import com.comuto.StringsProvider
    import com.comuto.coreui.fragment.PixarFragmentV2
    import com.comuto.di.InjectHelper
-   import com.comuto.features.publication.di.${className}Component
-   import com.comuto.pixar.widget.button.PrimaryButton
-   import com.comuto.pixar.widget.disclaimer.Disclaimer
-   import com.comuto.ui.feedback.FeedbackMessageProvider
+   import com.comuto.databinding.${layountName.toCamelCase().replace("_","")}Binding
    import javax.inject.Inject
    
    class $className : PixarFragmentV2() {
@@ -34,10 +31,12 @@ fun createPresentationFragment(
       @Inject
       lateinit var viewModel: $viewModelName
 
-      private var _binding: ${className.toCamelCase()}LayoutBinding? = null
+      private var _binding: ${layountName.toCamelCase().replace("_","")}Binding? = null
       private val binding get() = _binding!!
 
-
+      private val toolbar: Toolbar
+        get() = binding.toolbar.root
+        
       override fun getScreenName() = TODO()
 
       companion object {
@@ -47,7 +46,7 @@ fun createPresentationFragment(
       }
 
       override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-          _binding = ${className.toCamelCase()}LayoutBinding.inflate(inflater, container, false)
+          _binding = ${layountName.toCamelCase().replace("_","")}Binding.inflate(inflater, container, false)
           return binding.root
       }
 
@@ -77,8 +76,8 @@ fun createPresentationFragment(
       }
 
       override fun injectFragment() {
-              InjectHelper.getOrCreateSubcomponent(requireContext(), ${subComponentName}::class.java)
-              .${subComponentName.toCamelCase()}Builder()
+              InjectHelper.getOrCreateSubcomponent(requireContext(),TODO())
+              .TODO()
               .bind(this)
               .bind(requireActivity())
               .build()
@@ -150,9 +149,9 @@ fun createPresentationViewModelFactory(
 fun createPresentationSubComponent(
     presentationPackageName: String = PackageManager.packageName,
     injectionPackageName: String = PackageManager.packageName,
-    viewModelName: String,
     subComponentName :String,
-    fragmentName: String
+    fragmentName: String,
+    viewModelName: String
 ) = """
 package $injectionPackageName
 
@@ -163,7 +162,7 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 
 
-@Subcomponent()
+@Subcomponent(modules = [${viewModelName}Module::class])
 interface $subComponentName {
 
     fun inject(fragment: $fragmentName)
@@ -176,7 +175,7 @@ interface $subComponentName {
         @BindsInstance
         fun bind(activity: FragmentActivity): Builder
 
-        fun build(): ${subComponentName.toCamelCase()}
+        fun build(): $subComponentName
     }
 }
     
@@ -187,7 +186,6 @@ fun createPresentationModule(
     presentationPackageName: String = PackageManager.packageName,
     injectionPackageName: String = PackageManager.packageName,
     viewModelName: String,
-    subComponentName :String,
     fragmentName: String
 ) = """
 package $injectionPackageName
@@ -209,5 +207,30 @@ class ${viewModelName}Module {
     ): $viewModelName=
         ViewModelProvider(fragment, factory)[${viewModelName}::class.java]
 }
+    
+""".trimIndent()
+
+
+fun createPresentationLayoutXML()=""" 
+    <?xml version="1.0" encoding="utf-8"?>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        >
+       
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
     
 """.trimIndent()

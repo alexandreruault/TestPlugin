@@ -28,6 +28,13 @@ val fragmentPresentationLayerTemplate
             help = "Use the class name for prefix"
             constraints = listOf(Constraint.NONEMPTY)
         }
+
+        val layoutName = stringParameter {
+            name = "Layout Name"
+            default = "layout_fragment_name"
+            help = "Use the class name for prefix"
+            constraints = listOf(Constraint.NONEMPTY)
+        }
         val viewModelNameParam = stringParameter {
             name = "ViewModel Name"
             default = "ViewModel"
@@ -43,17 +50,19 @@ val fragmentPresentationLayerTemplate
         widgets(
             PackageNameWidget(packageNameParam),
             TextFieldWidget(classNameParam),
+            TextFieldWidget(layoutName),
             TextFieldWidget(viewModelNameParam),
             TextFieldWidget(subComponentName)
         )
 
         recipe = { data: TemplateData ->
             fragmentPresentationLayerTemplate(
-                data as ModuleTemplateData,
-                packageNameParam.value,
-                classNameParam.value,
-                viewModelNameParam.value,
-                subComponentName.value
+                moduleData = data as ModuleTemplateData,
+                packageName =  packageNameParam.value,
+                className = classNameParam.value,
+                layoutName = layoutName.value,
+                viewModelName = viewModelNameParam.value,
+                subComponentName = subComponentName.value
             )
         }
     }
