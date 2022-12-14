@@ -2,12 +2,11 @@ package com.github.alexandreruault.testplugin.template.presentationlayer.klass
 
 import android.databinding.tool.ext.toCamelCase
 import com.github.alexandreruault.testplugin.manager.PackageManager
-import com.github.alexandreruault.testplugin.template.presentationlayer.viewModel
 
 fun createPresentationFragment(
     presentationPackageName: String = PackageManager.packageName,
     className: String,
-    layountName: String,
+    layounName: String,
     viewModelName: String,
 ) = """
   package $presentationPackageName
@@ -20,7 +19,7 @@ fun createPresentationFragment(
    import com.comuto.R
    import com.comuto.coreui.fragment.PixarFragmentV2
    import com.comuto.di.InjectHelper
-   import com.comuto.databinding.${layountName.toCamelCase().replace("_","")}Binding
+   import com.comuto.databinding.${layounName.toCamelCase().replace("_","")}Binding
    import javax.inject.Inject
    
    class $className : PixarFragmentV2() {
@@ -31,7 +30,7 @@ fun createPresentationFragment(
       @Inject
       lateinit var viewModel: $viewModelName
 
-      private var _binding: ${layountName.toCamelCase().replace("_","")}Binding? = null
+      private var _binding: ${layounName.toCamelCase().replace("_","")}Binding? = null
       private val binding get() = _binding!!
 
       private val toolbar: Toolbar
@@ -46,7 +45,7 @@ fun createPresentationFragment(
       }
 
       override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-          _binding = ${layountName.toCamelCase().replace("_","")}Binding.inflate(inflater, container, false)
+          _binding = ${layounName.toCamelCase().replace("_","")}Binding.inflate(inflater, container, false)
           return binding.root
       }
 

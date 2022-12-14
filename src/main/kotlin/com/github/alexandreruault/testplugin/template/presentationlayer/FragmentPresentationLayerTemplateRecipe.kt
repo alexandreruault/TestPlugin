@@ -4,7 +4,6 @@ import com.android.tools.idea.wizard.template.ModuleTemplateData
 import com.android.tools.idea.wizard.template.RecipeExecutor
 import com.android.tools.idea.wizard.template.impl.activities.common.addAllKotlinDependencies
 import com.github.alexandreruault.testplugin.listeners.MyProjectManagerListener.Companion.projectInstance
-import com.github.alexandreruault.testplugin.manager.Path
 import com.github.alexandreruault.testplugin.manager.ProjectFileManager
 import com.github.alexandreruault.testplugin.manager.addPackageName
 import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationFragment
@@ -15,11 +14,8 @@ import com.github.alexandreruault.testplugin.template.presentationlayer.klass.cr
 import com.github.alexandreruault.testplugin.template.presentationlayer.klass.createPresentationViewModelFactory
 import com.github.alexandreruault.testplugin.template.utils.asKt
 import com.github.alexandreruault.testplugin.template.utils.asXml
-import com.github.alexandreruault.testplugin.template.utils.save
 import com.github.alexandreruault.testplugin.template.utils.saveClass
 import com.github.alexandreruault.testplugin.template.utils.saveXML
-import org.jetbrains.kotlin.cli.common.repl.replInputAsXml
-import org.jetbrains.kotlin.cli.common.repl.replOutputAsXml
 
 fun RecipeExecutor.fragmentPresentationLayerTemplate(
     moduleData: ModuleTemplateData,
@@ -38,7 +34,7 @@ fun RecipeExecutor.fragmentPresentationLayerTemplate(
     val pfm = ProjectFileManager(project, moduleData, packageName)
     if (pfm.init().not()) return
 
-    createPresentationFragment(className = className, layountName = layoutName ,viewModelName = viewModelName).saveClass(
+    createPresentationFragment(className = className, layounName = layoutName ,viewModelName = viewModelName).saveClass(
         pfm.getPath(),
         packageName,
         className.asKt()
